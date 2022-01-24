@@ -5,5 +5,9 @@ Sorare is a fantasy game of football, where players buy, sell, trade, and manage
 The game uses blockchain technology based on Ethereum
 
 Scripts:
+
+
 collect_sorare_teams.py - collects all teams featured in Sorare
+
+
 collect_players.py - collects all players who have rare cards
