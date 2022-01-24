@@ -34,7 +34,7 @@ for club in data["data"]["clubsReady"]:
     last = ll[-1].capitalize()
     teams.append({"name": f"{first} {last}", "slug": name})
 
-df = pd.DataFrame(teams)  # Saving all the players in a SQL database
+df = pd.DataFrame(teams)  # Saving all the teams in a SQL database
 df.to_sql(
     "sorare_teams",
     con=engine,

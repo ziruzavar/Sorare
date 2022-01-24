@@ -1,3 +1,6 @@
 *.env
 settings.py
 *.graphql
+.pytest_cache
+__pycache__
+sorare_api.con.py
