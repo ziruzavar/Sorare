@@ -20,25 +20,32 @@ query = """
 {
   clubsReady{
     slug
+    name
+    domesticLeague{
+      country{
+        code
+      }
+      name
+    }
   }
 }
 """
+
+
 teams = []
 data = client.execute(query=query)
-print(data["data"]["clubsReady"])
 
 for club in data["data"]["clubsReady"]:
     name = club["slug"]
-    ll = name.split("-")
-    first = ll[0].capitalize()
-    last = ll[-1].capitalize()
-    teams.append({"name": f"{first} {last}", "slug": name})
+    t_name = club["name"]
+    league = club["domesticLeague"]["name"]
+    teams.append({"name": t_name, "slug": name, "league": league})
 
 df = pd.DataFrame(teams)  # Saving all the teams in a SQL database
 df.to_sql(
     "sorare_teams",
     con=engine,
     schema="transfermarkt_test",
-    if_exists="replace",
+    if_exists="append",
     index=False,
 )

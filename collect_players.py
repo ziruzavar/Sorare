@@ -21,14 +21,22 @@ teams = pd.read_sql("SELECT * FROM transfermarkt_test.sorare_teams", engine)
 query = """
 {
   club(slug: "team_slug"){
-    players{
-      edges{
-        node{
-            displayName
-          cardSupply{
-            rare
-          }
+    players(after: null){
+      nodes{
+          id
+          displayName
+          slug
+        activeClub{
+          name
         }
+        cardSupply{
+          rare
+          limited
+        }
+      }
+      pageInfo{
+          endCursor
+        	hasNextPage
       }
     }
   }
@@ -36,23 +44,39 @@ query = """
 """
 
 players = []
+# Iteratting over players from each team
+def iterate_over_players(data):
+    for node in data["club"]["players"]["nodes"]:
+        current_team_name = node["activeClub"]["name"] if node["activeClub"] else None
+        if node["cardSupply"]:
+            players.append(
+                {
+                    "player_name": node["displayName"],
+                    "current_team_name": current_team_name,
+                    "player_id": node["id"].split(":")[-1],
+                    "slug": node['slug']
+                }
+            )
+
 
 # Iteratting over the teams
 for index, row in teams.iterrows():
     data = client.execute(query=query.replace("team_slug", row["slug"]))
+    iterate_over_players(data["data"])
+    while data["data"]["club"]["players"]["pageInfo"]["hasNextPage"]:
+        cursor = data["data"]["club"]["players"]["pageInfo"]["endCursor"]
+        data = client.execute(
+            query=query.replace("team_slug", row["slug"]).replace("null", f'"{cursor}"')
+        )
+        iterate_over_players(data["data"])
 
-    # Iteratting over players from each team
-    for node in data["data"]["club"]["players"]["edges"]:
-        if node["node"]["cardSupply"]:
-            players.append(
-                {"player_name": node["node"]["displayName"], "team_name": row["name"]}
-            )
-            
 df = pd.DataFrame(players)  # Saving all the players in a SQL database
 df.to_sql(
     "sorare_players",
     con=engine,
     schema="transfermarkt_test",
-    if_exists="replace",
+    if_exists="append",
     index=False,
+    method="multi",
+    chunksize=100,
 )
