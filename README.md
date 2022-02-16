@@ -9,5 +9,6 @@ Scripts:
 
 collect_sorare_teams.py - collects all teams featured in Sorare
 
+collect_sorare_national_players.py - collects players who are linked to a national team - rare&limited cards.
 
 collect_players.py - collects all players who have rare cards
