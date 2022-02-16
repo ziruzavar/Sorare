@@ -4,3 +4,11 @@ settings.py
 .pytest_cache
 __pycache__
 sorare_api.con.py
+*twitter*.py
+match_sorare_teams.py
+helper_funcs.py
+scrape*.py
+sorare_player_offers_price.py
+*.html
+data.json
+discord*.py
