@@ -12,3 +12,5 @@ collect_sorare_teams.py - collects all teams featured in Sorare
 collect_sorare_national_players.py - collects players who are linked to a national team - rare&limited cards.
 
 collect_players.py - collects all players who have rare cards
+
+sorare_player_offers_price.py - Collects all offer prices for sorare cards(limited, rare). Note: This can run for more than an hour, depends on how many players you supply it. with. 
