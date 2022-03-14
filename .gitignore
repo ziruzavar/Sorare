@@ -8,7 +8,9 @@ sorare_api.con.py
 match_sorare_teams.py
 helper_funcs.py
 scrape*.py
-sorare_player_offers_price.py
 *.html
 data.json
 discord*.py
+*.dat
+test.py
+match*.py
